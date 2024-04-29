@@ -57,7 +57,7 @@ export const NavBar = () => (
   <Box sx={{ position: 'relative', zIndex: 1 }}>
     <AppBar
       position='fixed'
-      sx={{ backgroundColor: 'transparent', boxShadow: 'none' }}
+      sx={{  backgroundColor: alpha('#333', 0.8), boxShadow: 'none' }}
     >
       <Toolbar>
         <IconButton

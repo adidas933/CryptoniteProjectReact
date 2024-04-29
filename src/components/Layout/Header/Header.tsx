@@ -25,6 +25,7 @@ export const Header = () => {
         color: '#fff',
         zIndex: 0,
         backgroundPosition: 'top',
+        backgroundAttachment: 'fixed',
       }}
       >
       <div>

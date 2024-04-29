@@ -22,9 +22,9 @@ export const CoinMoreInfo = ({
       {moreInfoContent ? (
         <div>
           <img src={moreInfoContent.image.thumb} alt='Coin image' />
-          <p>{moreInfoContent.market_data.current_price.usd}</p>
-          <p>{moreInfoContent.market_data.current_price.eur}</p>
-          <p>{moreInfoContent.market_data.current_price.ils}</p>
+          <p>{moreInfoContent.market_data.current_price.usd} $</p>
+          <p>{moreInfoContent.market_data.current_price.eur} €</p>
+          <p>{moreInfoContent.market_data.current_price.ils} ₪</p>
         </div>
       ) : (
         <p>No more info available</p>

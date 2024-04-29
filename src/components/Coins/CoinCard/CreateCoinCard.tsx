@@ -5,8 +5,10 @@ import {
   CardContent,
   CardHeader,
   Collapse,
+  Grid,
   IconButton,
   IconButtonProps,
+  Typography,
   styled,
 } from '@mui/material';
 import { CoinsProps } from '../Coins';
@@ -62,15 +64,19 @@ export const CoinCard = ({ coin }: CoinCardProps) => {
     setExpanded(!expanded);
   };
   return (
-    <div className='CoinCard'>
-      <Card sx={{ maxWidth: 345 }}>
+    <Grid item xs={12} sm={6} md={4} lg={3}>
+      <Card sx={{ maxWidth: 345, height: '100%', backgroundColor: 'lightGrey' }}>
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label='recipe'>
               {coin.symbol}
             </Avatar>
           }
-          title={coin.name}
+          title={
+            <Typography variant='h6' >
+              {coin.name} ({coin.symbol})
+            </Typography>
+          }
         />
         <CardActions disableSpacing>
           <IconButton aria-label='add to favorites'>
@@ -91,6 +97,6 @@ export const CoinCard = ({ coin }: CoinCardProps) => {
           </CardContent>
         </Collapse>
       </Card>
-    </div>
+    </Grid>
   );
 };

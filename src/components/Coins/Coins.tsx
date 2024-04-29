@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { fetchCoins } from './fetchCoins/fetchCoins';
 import { CoinCard } from './CoinCard/CreateCoinCard';
+import { Grid } from '@mui/material';
 
 export interface CoinsProps {
   id: string;
@@ -34,10 +35,12 @@ export const Coins = () => {
   }, []);
 
   return (
-    <div>
-      {coins.slice(0, 100).map((coin: CoinsProps) => (
-        <CoinCard key={coin.id} coin={coin} />
-      ))}
-    </div>
+       <div style={{ padding: '0 16px' }}>
+      <Grid container spacing={2}>
+        {coins.slice(0, 100).map((coin: CoinsProps) => (
+          <CoinCard key={coin.id} coin={coin} />
+        ))}
+      </Grid>
+      </div>
   );
 };
