@@ -4,19 +4,19 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  CardMedia,
   Collapse,
   IconButton,
   IconButtonProps,
-  Typography,
   styled,
 } from '@mui/material';
 import { CoinsProps } from '../Coins';
 import './CoinCard.css';
-import React from 'react';
+import React, { useState } from 'react';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { CoinMoreInfo, MoreInfoState } from './CoinMoreInfo';
+import { fetchMoreInfoCoin } from './fetchMoreInfoCoin';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -40,11 +40,27 @@ interface CoinCardProps {
 
 export const CoinCard = ({ coin }: CoinCardProps) => {
   const [expanded, setExpanded] = React.useState(false);
+  const [moreInfo, setMoreInfo] = useState<MoreInfoState | null>(null);
+
   const handleExpandClick = () => {
-    // fetch moreinfo coin data
+    if (!expanded) {
+      const coinMoreInfoFromStorage = JSON.parse(
+        localStorage.getItem(coin.id) || '[]'
+      );
+      if (coinMoreInfoFromStorage.length === 0) {
+        fetchMoreInfoCoin(coin.id).then((fetchedCoins) => {
+          localStorage.setItem(coin.id, JSON.stringify(fetchedCoins));
+          setMoreInfo(fetchedCoins);
+        });
+      } else {
+        setMoreInfo(coinMoreInfoFromStorage);
+      }
+      setExpanded(!expanded);
+    } else {
+      setMoreInfo(null);
+    }
     setExpanded(!expanded);
   };
-  console.log(coin);
   return (
     <div className='CoinCard'>
       <Card sx={{ maxWidth: 345 }}>
@@ -71,10 +87,7 @@ export const CoinCard = ({ coin }: CoinCardProps) => {
         </CardActions>
         <Collapse in={expanded} timeout='auto' unmountOnExit>
           <CardContent>
-            <CardMedia component='img' height='' image='' alt='Coin image' />
-            <Typography paragraph>Value in dollars:</Typography>
-            <Typography paragraph>Value in Euro:</Typography>
-            <Typography paragraph>Value in ILS:</Typography>
+            {moreInfo && <CoinMoreInfo moreInfoContent={moreInfo} />}
           </CardContent>
         </Collapse>
       </Card>

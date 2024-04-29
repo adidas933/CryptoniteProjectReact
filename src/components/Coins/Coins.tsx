@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-
-import { FetchCoins } from './FetchCoins/FetchCoins';
+import { fetchCoins } from './fetchCoins/fetchCoins';
 import { CoinCard } from './CoinCard/CreateCoinCard';
 
 export interface CoinsProps {
@@ -23,7 +22,7 @@ export const Coins = () => {
           <CircularProgress />
         </Box>; */
 
-        FetchCoins().then((fetchedCoins) => {
+        fetchCoins().then((fetchedCoins) => {
           localStorage['coins'] = JSON.stringify(fetchedCoins);
           setCoins(fetchedCoins);
         });
@@ -37,7 +36,7 @@ export const Coins = () => {
   return (
     <div>
       {coins.slice(0, 100).map((coin: CoinsProps) => (
-        <CoinCard coin={coin}/>
+        <CoinCard key={coin.id} coin={coin} />
       ))}
     </div>
   );
