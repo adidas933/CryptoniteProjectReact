@@ -13,8 +13,7 @@ import {
 } from '@mui/material';
 import { CoinsProps } from '../Coins';
 import './CoinCard.css';
-import React, { useState } from 'react';
-import { red } from '@mui/material/colors';
+import React, { useEffect, useState } from 'react';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { CoinMoreInfo, MoreInfoState } from './CoinMoreInfo';
@@ -43,6 +42,44 @@ interface CoinCardProps {
 export const CoinCard = ({ coin }: CoinCardProps) => {
   const [expanded, setExpanded] = React.useState(false);
   const [moreInfo, setMoreInfo] = useState<MoreInfoState | null>(null);
+  const [favoriteCoins, setFavoriteCoins] = useState<string[]>([]);
+
+  useEffect(() => {
+    const favoriteCoinsFromStorage = JSON.parse(
+      localStorage.getItem('favoriteCoins') || '[]'
+    );
+    console.log('Initial favoriteCoins:', favoriteCoinsFromStorage); 
+    setFavoriteCoins(favoriteCoinsFromStorage);
+  }, []);
+  
+  const handleFavoriteButtonClicked = () => {
+    const favoriteCoinsFromStorage = JSON.parse(
+      localStorage.getItem('favoriteCoins') || '[]'
+    );
+/*     if (favoriteCoinsFromStorage.length > 5) { 
+      addModalContent(favoriteCoinsFromStorage);
+      saveChangesBtn.on('click', function () {
+        saveChanges(favoriteCoinsFromStorage);
+        toggleFavoriteButtons(coin, favoriteBtn);
+      });
+      alertFavoritesModal.show();
+    } */
+    const isFavorite = favoriteCoinsFromStorage.includes(coin.id);
+    let newFavorites;
+    if (!isFavorite) {
+      newFavorites = [...favoriteCoinsFromStorage, coin.id];
+    } else {
+      newFavorites = favoriteCoinsFromStorage.filter(
+        (id: string) => id !== coin.id
+      );
+    }
+    localStorage.setItem('favoriteCoins', JSON.stringify(newFavorites));
+    setFavoriteCoins(newFavorites);
+  };
+
+  // hideModal();
+  // handle modal:
+  //   }
 
   const handleExpandClick = () => {
     if (!expanded) {
@@ -63,24 +100,32 @@ export const CoinCard = ({ coin }: CoinCardProps) => {
     }
     setExpanded(!expanded);
   };
+
   return (
     <Grid item xs={12} sm={6} md={4} lg={3}>
-      <Card sx={{ maxWidth: 345, height: '100%', backgroundColor: 'lightGrey' }}>
+      <Card
+        sx={{ maxWidth: 345, height: '100%', backgroundColor: 'lightGrey' }}
+      >
         <CardHeader
           avatar={
-            <Avatar sx={{ bgcolor: red[500] }} aria-label='recipe'>
+            <Avatar sx={{ bgcolor: '#B0E57C' }} aria-label='recipe'>
               {coin.symbol}
             </Avatar>
           }
           title={
-            <Typography variant='h6' >
+            <Typography variant='h6'>
               {coin.name} ({coin.symbol})
             </Typography>
           }
         />
         <CardActions disableSpacing>
-          <IconButton aria-label='add to favorites'>
-            <FavoriteIcon />
+          <IconButton
+            aria-label='add to favorites'
+            onClick={handleFavoriteButtonClicked}
+          >
+            <FavoriteIcon
+              sx={{ color: favoriteCoins.includes(coin.id) ? 'Crimson' : '' }}
+            />
           </IconButton>
           <ExpandMore
             expand={expanded}

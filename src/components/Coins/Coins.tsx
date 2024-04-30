@@ -35,12 +35,12 @@ export const Coins = () => {
   }, []);
 
   return (
-       <div style={{ padding: '0 16px' }}>
+    <div style={{ padding: '0 16px' }}>
       <Grid container spacing={2}>
         {coins.slice(0, 100).map((coin: CoinsProps) => (
           <CoinCard key={coin.id} coin={coin} />
         ))}
       </Grid>
-      </div>
+    </div>
   );
 };
