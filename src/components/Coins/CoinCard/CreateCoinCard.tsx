@@ -5,6 +5,7 @@ import {
   CardContent,
   CardHeader,
   Collapse,
+  Dialog,
   Grid,
   IconButton,
   IconButtonProps,
@@ -18,6 +19,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { CoinMoreInfo, MoreInfoState } from './CoinMoreInfo';
 import { fetchMoreInfoCoin } from './fetchMoreInfoCoin';
+import { CustomDialog } from './CustomDialog';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -43,27 +45,33 @@ export const CoinCard = ({ coin }: CoinCardProps) => {
   const [expanded, setExpanded] = React.useState(false);
   const [moreInfo, setMoreInfo] = useState<MoreInfoState | null>(null);
   const [favoriteCoins, setFavoriteCoins] = useState<string[]>([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
     const favoriteCoinsFromStorage = JSON.parse(
       localStorage.getItem('favoriteCoins') || '[]'
     );
-    console.log('Initial favoriteCoins:', favoriteCoinsFromStorage); 
     setFavoriteCoins(favoriteCoinsFromStorage);
   }, []);
-  
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+
   const handleFavoriteButtonClicked = () => {
     const favoriteCoinsFromStorage = JSON.parse(
       localStorage.getItem('favoriteCoins') || '[]'
     );
-/*     if (favoriteCoinsFromStorage.length > 5) { 
-      addModalContent(favoriteCoinsFromStorage);
+    if (favoriteCoinsFromStorage.length > 4) {
+      setDialogOpen(true);
+      // <Dialog favoriteCoinsFromStorage={favoriteCoinsFromStorage}/>
+      /*    addModalContent(favoriteCoinsFromStorage);
       saveChangesBtn.on('click', function () {
         saveChanges(favoriteCoinsFromStorage);
         toggleFavoriteButtons(coin, favoriteBtn);
       });
-      alertFavoritesModal.show();
-    } */
+      alertFavoritesModal.show(); */
+    }
     const isFavorite = favoriteCoinsFromStorage.includes(coin.id);
     let newFavorites;
     if (!isFavorite) {
@@ -76,10 +84,6 @@ export const CoinCard = ({ coin }: CoinCardProps) => {
     localStorage.setItem('favoriteCoins', JSON.stringify(newFavorites));
     setFavoriteCoins(newFavorites);
   };
-
-  // hideModal();
-  // handle modal:
-  //   }
 
   const handleExpandClick = () => {
     if (!expanded) {
@@ -127,6 +131,9 @@ export const CoinCard = ({ coin }: CoinCardProps) => {
               sx={{ color: favoriteCoins.includes(coin.id) ? 'Crimson' : '' }}
             />
           </IconButton>
+          <Dialog open={dialogOpen} onClose={handleDialogClose}>
+            <CustomDialog favoriteCoinsFromStorage={favoriteCoins} />
+          </Dialog>
           <ExpandMore
             expand={expanded}
             onClick={handleExpandClick}
