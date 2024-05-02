@@ -35,6 +35,7 @@ export const CustomDialog = ({
       ...prevState,
       [coin]: !prevState[coin],
     }));
+    // Add push to an array and then to local storage
   };
 
   return (
@@ -64,6 +65,7 @@ export const CustomDialog = ({
               autoFocus
               onClick={() => handleListItemClick('addAccount')}
             ></ListItemButton>
+            
           </ListItem>
         </List>
       </>

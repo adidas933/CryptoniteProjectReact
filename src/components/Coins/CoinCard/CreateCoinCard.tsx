@@ -1,25 +1,22 @@
 import {
-  Avatar,
   Card,
   CardActions,
   CardContent,
-  CardHeader,
   Collapse,
-  Dialog,
   Grid,
   IconButton,
   IconButtonProps,
-  Typography,
   styled,
 } from '@mui/material';
 import { CoinsProps } from '../Coins';
 import './CoinCard.css';
 import React, { useEffect, useState } from 'react';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { CoinMoreInfo, MoreInfoState } from './CoinMoreInfo';
 import { fetchMoreInfoCoin } from './fetchMoreInfoCoin';
-import { CustomDialog } from './CustomDialog';
+import { CoinHeader } from '../../CoinAvatar/CoinHeader';
+import { FavoriteButton } from '../../FavoriteButton/FavoriteButton';
+import { CoinDialog } from '../../CoinDialog/CoinDialog';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -110,30 +107,17 @@ export const CoinCard = ({ coin }: CoinCardProps) => {
       <Card
         sx={{ maxWidth: 345, height: '100%', backgroundColor: 'lightGrey' }}
       >
-        <CardHeader
-          avatar={
-            <Avatar sx={{ bgcolor: '#B0E57C' }} aria-label='recipe'>
-              {coin.symbol}
-            </Avatar>
-          }
-          title={
-            <Typography variant='h6'>
-              {coin.name} ({coin.symbol})
-            </Typography>
-          }
-        />
+        <CoinHeader coin={coin} />
         <CardActions disableSpacing>
-          <IconButton
-            aria-label='add to favorites'
+          <FavoriteButton
+            isFavorite={favoriteCoins.includes(coin.id)}
             onClick={handleFavoriteButtonClicked}
-          >
-            <FavoriteIcon
-              sx={{ color: favoriteCoins.includes(coin.id) ? 'Crimson' : '' }}
-            />
-          </IconButton>
-          <Dialog open={dialogOpen} onClose={handleDialogClose}>
-            <CustomDialog favoriteCoinsFromStorage={favoriteCoins} />
-          </Dialog>
+          />
+          <CoinDialog
+            isOpen={dialogOpen}
+            onClose={handleDialogClose}
+            favoriteCoins={favoriteCoins}
+          />
           <ExpandMore
             expand={expanded}
             onClick={handleExpandClick}
