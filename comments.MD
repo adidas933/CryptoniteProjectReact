@@ -1,0 +1,4 @@
+- Do you need the homepage page? 
+- You import with wrong capital letters (like from './fetchMoreInfoCoin') its suppose to be rom './FetchMoreInfoCoin';
+- You can choose more then 5 favorite.
+- About us don't navigate to anything.
